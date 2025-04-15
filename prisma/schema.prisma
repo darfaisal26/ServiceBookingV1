@@ -7,7 +7,7 @@
 generator client {
   provider = "prisma-client-js"
   // output   = "../generated/prisma"
-  output   = "../../node_modules/.prisma/client"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -17,233 +17,228 @@ datasource db {
 
 // prisma/schema.prisma
 
-enum BookingStatus {
-  Pending
-  Confirmed
-  InProgress
-  Completed
-  Cancelled
-}
+model User {
+  id               Int       @id @default(autoincrement())
+  name             String
+  email            String    @unique
+  password         String
+  phoneNumber      String?
+  iqamaNo          String?
+  iqamaExpiry      DateTime?
+  roleId           Int       @default(1)
+  genderId         Int
+  age              String?
+  refreshToken     String?
+  resetToken       String?
+  resetTokenExpiry DateTime?
 
-enum PaymentStatusEnum {
-  Active
-  Inactive
-}
-
-model Booking {
-  id             Int           @id @default(autoincrement())
-  driver_id      Int
-  worker_id      Int
-  client_id      Int
-  service_id     Int
-  address_id     Int
-  start_time     String
-  end_time       String
-  booking_date   String
-  booking_status BookingStatus
-  is_active      Boolean       @default(true)
-  created_on     DateTime      @default(now())
-  Created_by     Int
-  updated_by     Int?
-
-  driver       DriverProfile  @relation(fields: [driver_id], references: [id])
-  worker       WorkerProfile  @relation(fields: [worker_id], references: [id])
-  client       ClientProfile  @relation(fields: [client_id], references: [id])
-  service      ServiceMaster  @relation(fields: [service_id], references: [id])
-  address      UserAddress    @relation(fields: [address_id], references: [id])
-  ClientReview ClientReview[]
-}
-
-model ClientProfile {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-  is_active  Boolean  @default(true)
-
-  user         User           @relation(fields: [user_id], references: [id])
-  Booking      Booking[]
-  ClientReview ClientReview[]
-}
-
-model ClientReview {
-  id         Int     @id @default(autoincrement())
-  ReviewText String?
-  Rating     Int
-  client_id  Int
-  booking_id Int
-
-  client  ClientProfile @relation(fields: [client_id], references: [id])
-  booking Booking       @relation(fields: [booking_id], references: [id])
-}
-
-model DriverProfile {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-  is_active  Boolean  @default(true)
-
-  user    User      @relation(fields: [user_id], references: [id])
-  Booking Booking[]
-}
-
-model GenderMaster {
-  id          Int    @id @default(autoincrement())
-  gender_name String
-
-  users User[]
-}
-
-model NotificationMaster {
-  id                Int      @id @default(autoincrement())
-  notification_name String
-  created_at        DateTime @default(now())
-  updated_at        DateTime @default(now()) @updatedAt
-
-  preferences UserNotificationPreference[]
-}
-
-model PaymentMethodMaster {
-  id             Int      @id @default(autoincrement())
-  payment_method String
-  is_active      Boolean  @default(true)
-  created_on     DateTime @default(now())
-
-  payments Payment[]
-}
-
-model Payment {
-  id                Int               @id @default(autoincrement())
-  payment_method_id Int
-  payment_status_id Int
-  booking_id        Int
-  transaction_id    String
-  amount            Float
-  balance           Float
-  status            PaymentStatusEnum @default(Active)
-  created_on        DateTime          @default(now())
-
-  paymentMethod PaymentMethodMaster @relation(fields: [payment_method_id], references: [id])
-  paymentStatus PaymentStatusMaster @relation(fields: [payment_status_id], references: [id])
-}
-
-model PaymentStatusMaster {
-  id             Int     @id
-  payment_status String
-  is_active      Boolean @default(true)
-
-  payments Payment[]
+  role   Role         @relation(fields: [roleId], references: [id])
+  gender GenderMaster @relation(fields: [genderId], references: [id])
+  // ClientProfile              ClientProfile[]
+  // DriverProfile              DriverProfile[]
+  // UserAddress                UserAddress[]
+  // UserNotificationPreference UserNotificationPreference[]
+  // WorkerProfile              WorkerProfile[]
 }
 
 model Role {
-  id        Int    @id @default(autoincrement())
-  role_name String
+  id       Int    @id @default(autoincrement())
+  roleName String
 
   users User[]
 }
 
-model ServiceMaster {
-  id           Int      @id @default(autoincrement())
-  service_name String
-  created_at   DateTime @default(now())
-  is_active    Boolean  @default(true)
+model GenderMaster {
+  id         Int    @id @default(autoincrement())
+  genderName String
 
-  workerServices WorkerServices[]
-  Booking        Booking[]
+  users User[]
 }
 
-model SkillMaster {
-  id         Int      @id @default(autoincrement())
-  skill_name String
-  created_at DateTime @default(now())
-  is_active  Boolean  @default(true)
+// enum PaymentStatusEnum {
+//   Active
+//   Inactive
+// }
 
-  workerSkills WorkerSkills[]
-}
+// model Booking {
+//   id             Int           @id @default(autoincrement())
+//   driver_id      Int
+//   worker_id      Int
+//   client_id      Int
+//   service_id     Int
+//   address_id     Int
+//   start_time     String
+//   end_time       String
+//   booking_date   String
+//   booking_status BookingStatus
+//   is_active      Boolean       @default(true)
+//   created_on     DateTime      @default(now())
+//   Created_by     Int
+//   updated_by     Int?
 
-model SystemAdminProfile {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-  is_active  Boolean  @default(true)
-}
+//   driver       DriverProfile  @relation(fields: [driver_id], references: [id])
+//   worker       WorkerProfile  @relation(fields: [worker_id], references: [id])
+//   client       ClientProfile  @relation(fields: [client_id], references: [id])
+//   service      ServiceMaster  @relation(fields: [service_id], references: [id])
+//   address      UserAddress    @relation(fields: [address_id], references: [id])
+//   ClientReview ClientReview[]
+// }
 
-model UserAddress {
-  id      Int    @id @default(autoincrement())
-  user_id Int
-  street  String
-  city    String
-  state   String
-  zipcode String
-  country String
+// model ClientProfile {
+//   id         Int      @id @default(autoincrement())
+//   user_id    Int
+//   created_at DateTime @default(now())
+//   updated_at DateTime @default(now()) @updatedAt
+//   is_active  Boolean  @default(true)
 
-  user    User      @relation(fields: [user_id], references: [id])
-  Booking Booking[]
-}
+//   user         User           @relation(fields: [user_id], references: [id])
+//   Booking      Booking[]
+//   ClientReview ClientReview[]
+// }
 
-model User {
-  id           Int       @id @default(autoincrement())
-  name         String
-  email        String    @unique
-  password     String
-  contactinfo  String?
-  iqamano      String?
-  iqama_expiry DateTime?
-  roleid       Int
-  gender_id    Int
-  age          String?
+// model ClientReview {
+//   id         Int     @id @default(autoincrement())
+//   ReviewText String?
+//   Rating     Int
+//   client_id  Int
+//   booking_id Int
 
-  role                       Role                         @relation(fields: [roleid], references: [id])
-  gender                     GenderMaster                 @relation(fields: [gender_id], references: [id])
-  ClientProfile              ClientProfile[]
-  DriverProfile              DriverProfile[]
-  UserAddress                UserAddress[]
-  UserNotificationPreference UserNotificationPreference[]
-  WorkerProfile              WorkerProfile[]
-}
+//   client  ClientProfile @relation(fields: [client_id], references: [id])
+//   booking Booking       @relation(fields: [booking_id], references: [id])
+// }
 
-model UserNotificationPreference {
-  id              Int     @id @default(autoincrement())
-  user_id         Int
-  notification_id Int
-  is_enabled      Boolean @default(true)
+// model DriverProfile {
+//   id         Int      @id @default(autoincrement())
+//   user_id    Int
+//   created_at DateTime @default(now())
+//   updated_at DateTime @default(now()) @updatedAt
+//   is_active  Boolean  @default(true)
 
-  notification NotificationMaster @relation(fields: [notification_id], references: [id])
-  user         User               @relation(fields: [user_id], references: [id])
-}
+//   user    User      @relation(fields: [user_id], references: [id])
+//   Booking Booking[]
+// }
 
-model WorkerProfile {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-  is_active  Boolean  @default(true)
-  experience Int?
+// model NotificationMaster {
+//   id                Int      @id @default(autoincrement())
+//   notification_name String
+//   created_at        DateTime @default(now())
+//   updated_at        DateTime @default(now()) @updatedAt
 
-  user           User             @relation(fields: [user_id], references: [id])
-  workerServices WorkerServices[]
-  workerSkills   WorkerSkills[]
-  Booking        Booking[]
-}
+//   preferences UserNotificationPreference[]
+// }
 
-model WorkerServices {
-  worker_id  Int
-  service_id Int
+// model PaymentMethodMaster {
+//   id             Int      @id @default(autoincrement())
+//   payment_method String
+//   is_active      Boolean  @default(true)
+//   created_on     DateTime @default(now())
 
-  worker  WorkerProfile @relation(fields: [worker_id], references: [id])
-  service ServiceMaster @relation(fields: [service_id], references: [id])
+//   payments Payment[]
+// }
 
-  @@id([worker_id, service_id])
-}
+// model Payment {
+//   id                Int               @id @default(autoincrement())
+//   payment_method_id Int
+//   payment_status_id Int
+//   booking_id        Int
+//   transaction_id    String
+//   amount            Float
+//   balance           Float
+//   status            PaymentStatusEnum @default(Active)
+//   created_on        DateTime          @default(now())
 
-model WorkerSkills {
-  worker_id Int
-  skill_id  Int
+//   paymentMethod PaymentMethodMaster @relation(fields: [payment_method_id], references: [id])
+//   paymentStatus PaymentStatusMaster @relation(fields: [payment_status_id], references: [id])
+// }
 
-  worker WorkerProfile @relation(fields: [worker_id], references: [id])
-  skill  SkillMaster   @relation(fields: [skill_id], references: [id])
+// model PaymentStatusMaster {
+//   id             Int     @id
+//   payment_status String
+//   is_active      Boolean @default(true)
 
-  @@id([worker_id, skill_id])
-}
+//   payments Payment[]
+// }
+
+// model ServiceMaster {
+//   id           Int      @id @default(autoincrement())
+//   service_name String
+//   created_at   DateTime @default(now())
+//   is_active    Boolean  @default(true)
+
+//   workerServices WorkerServices[]
+//   Booking        Booking[]
+// }
+
+// model SkillMaster {
+//   id         Int      @id @default(autoincrement())
+//   skill_name String
+//   created_at DateTime @default(now())
+//   is_active  Boolean  @default(true)
+
+//   workerSkills WorkerSkills[]
+// }
+
+// model SystemAdminProfile {
+//   id         Int      @id @default(autoincrement())
+//   user_id    Int
+//   created_at DateTime @default(now())
+//   updated_at DateTime @default(now()) @updatedAt
+//   is_active  Boolean  @default(true)
+// }
+
+// model UserAddress {
+//   id      Int    @id @default(autoincrement())
+//   user_id Int
+//   street  String
+//   city    String
+//   state   String
+//   zipcode String
+//   country String
+
+//   user    User      @relation(fields: [user_id], references: [id])
+//   Booking Booking[]
+// }
+
+// model UserNotificationPreference {
+//   id              Int     @id @default(autoincrement())
+//   user_id         Int
+//   notification_id Int
+//   is_enabled      Boolean @default(true)
+
+//   notification NotificationMaster @relation(fields: [notification_id], references: [id])
+//   user         User               @relation(fields: [user_id], references: [id])
+// }
+
+// model WorkerProfile {
+//   id         Int      @id @default(autoincrement())
+//   user_id    Int
+//   created_at DateTime @default(now())
+//   updated_at DateTime @default(now()) @updatedAt
+//   is_active  Boolean  @default(true)
+//   experience Int?
+
+//   user           User             @relation(fields: [user_id], references: [id])
+//   workerServices WorkerServices[]
+//   workerSkills   WorkerSkills[]
+//   Booking        Booking[]
+// }
+
+// model WorkerServices {
+//   worker_id  Int
+//   service_id Int
+
+//   worker  WorkerProfile @relation(fields: [worker_id], references: [id])
+//   service ServiceMaster @relation(fields: [service_id], references: [id])
+
+//   @@id([worker_id, service_id])
+// }
+
+// model WorkerSkills {
+//   worker_id Int
+//   skill_id  Int
+
+//   worker WorkerProfile @relation(fields: [worker_id], references: [id])
+//   skill  SkillMaster   @relation(fields: [skill_id], references: [id])
+
+//   @@id([worker_id, skill_id])
+// }

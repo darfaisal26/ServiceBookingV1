@@ -11,6 +11,14 @@ const config = {
     host: process.env.DB_HOST || "127.0.0.1",
     port: parseInt(process.env.DB_PORT || "3306"),
   },
+  smtp: {
+    host: process.env.SMTP_HOST || "smtp.example.com",
+    port: parseInt(process.env.SMTP_PORT || "587"),
+    secure: process.env.SMTP_SECURE === "true",
+    user: process.env.SMTP_USER || "user@example.com",
+    password: process.env.SMTP_PASSWORD || "password",
+    from: process.env.SMTP_FROM || '"Your App" <noreply@example.com>',
+  },
 };
 
 export default config;

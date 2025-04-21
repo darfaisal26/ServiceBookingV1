@@ -27,10 +27,12 @@ model User {
   iqamaExpiry      DateTime?
   roleId           Int       @default(1)
   genderId         Int
-  age              String?
+  age              Int?
   refreshToken     String?
   resetToken       String?
   resetTokenExpiry DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   role   Role         @relation(fields: [roleId], references: [id])
   gender GenderMaster @relation(fields: [genderId], references: [id])

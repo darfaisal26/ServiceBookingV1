@@ -36,11 +36,7 @@ export const userRegistrationSchema = z.object({
     .int("Gender ID must be an integer")
     .positive("Invalid gender ID"),
 
-  age: z.coerce
-    .number()
-    .int("Age must be an integer")
-    .min(18, "Minimum age is 18")
-    .max(120, "Invalid age"),
+  age: z.number().min(18, "Minimum age is 18").max(120, "Invalid age"),
 
   roleId: z
     .number()

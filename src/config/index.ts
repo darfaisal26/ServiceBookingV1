@@ -12,7 +12,7 @@ const config = {
     port: parseInt(process.env.DB_PORT || "3306"),
   },
   smtp: {
-    host: process.env.SMTP_HOST || "smtp.example.com",
+    host: process.env.SMTP_HOST || "smtp.ethereal.email",
     port: parseInt(process.env.SMTP_PORT || "587"),
     secure: process.env.SMTP_SECURE === "true",
     user: process.env.SMTP_USER || "user@example.com",
@@ -22,3 +22,5 @@ const config = {
 };
 
 export default config;
+
+// docker run -d --name=mailpit --restart unless-stopped -p 8025:8025 -p 1025:1025 axllent/mailpit

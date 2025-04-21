@@ -24,7 +24,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
 
     // Send password reset email
     const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
-    // await sendPasswordResetEmail(email, resetUrl);
+    await sendPasswordResetEmail(email, resetUrl);
 
     res.status(200).json({ message: "Password reset email sent", resetUrl });
   } catch (error) {

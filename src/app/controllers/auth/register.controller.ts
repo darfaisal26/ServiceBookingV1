@@ -41,15 +41,12 @@ export const registerUser = async (req: Request, res: Response) => {
       name,
       email,
       password: hashedPassword,
-      phoneNumber: phoneNumber || null,
-      iqamaNo: iqamaNo || null,
-      iqamaExpiry: iqamaExpiry || null,
+      phoneNumber: phoneNumber,
+      iqamaNo: iqamaNo,
+      iqamaExpiry: iqamaExpiry,
       genderId: genderId,
-      age: age ? String(age) : null,
+      age: age,
       roleId: roleId,
-      refreshToken: null, // Explicitly initialize
-      resetToken: null,
-      resetTokenExpiry: null,
     });
 
     if (!newUser) {

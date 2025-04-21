@@ -1,22 +1,23 @@
-// src/app/routes/v1/user.routes.ts
 import { Router } from "express";
-import { getAllUsers } from "../../controllers/users.controller";
-// import UserController from "../../controllers/user.controller";
-// import { authenticate } from "../../middlewares/auth.middleware";
+import {
+  getAllGenders,
+  getAllRoles,
+  getAdminUsers,
+  getPublicUsers,
+} from "../../controllers/user/users.controller";
+import { authenticate } from "../../middlewares/auth.middleware";
+import { authorize } from "../../middlewares/roles.middlewares";
 
 const router = Router();
 
-// Initialize Controller
-// const userController = new UserController();
-
-// GET /api/v1/users
-// router.get("/", authenticate, userController.getAllUsers);
-
-// POST /api/v1/users
-// router.post("/", userController.createUser);
-
-// PUT /api/v1/users/:id
-// router.put("/:id", authenticate, userController.updateUser);
-router.get("/getAllUsers", getAllUsers);
+router.get("/public/users", getPublicUsers);
+router.get(
+  "/admin/users",
+  authenticate,
+  authorize(["SYSTEM_ADMIN"]),
+  getAdminUsers
+);
+router.get("/getAllRoles", getAllRoles);
+router.get("/getAllGenders", getAllGenders);
 
 export default router;

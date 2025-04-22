@@ -20,15 +20,12 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  console.log("in authenticate");
   const accessToken = req.headers.authorization?.split(" ")[1];
   const refreshToken = req?.cookies?.refreshToken;
-  console.log(req, refreshToken, "in authenticate 2");
   if (!accessToken && !refreshToken) {
     res.status(401).json({ error: "Authentication Required" });
     return;
   }
-  console.log("in authenticate 3");
   try {
     const decoded = jwt.verify(
       accessToken!,
@@ -72,7 +69,6 @@ async function handleTokenRefresh(
     res.status(401).json({ error: "Session expired. Please log in again" });
     return;
   }
-  console.log("got in handle token refresh 2");
   try {
     const decoded = jwt.verify(
       refreshToken,
@@ -83,7 +79,6 @@ async function handleTokenRefresh(
       where: { id: decoded.userId, refreshToken },
       select: { id: true, roleId: true, refreshToken: true },
     });
-    console.log("got in handle token refresh 3");
     if (!user) {
       res.status(401).json({ error: "Invalid refresh token" });
       return;

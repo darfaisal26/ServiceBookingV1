@@ -63,7 +63,7 @@ async function handleTokenRefresh(
   next: NextFunction,
   refreshToken?: string
 ): Promise<void> {
-  console.log("got in handle token refresh");
+  // console.log("got in handle token refresh");
 
   if (!refreshToken) {
     res.status(401).json({ error: "Session expired. Please log in again" });
@@ -91,7 +91,7 @@ async function handleTokenRefresh(
       where: { id: user.id },
       data: { refreshToken: newRefreshToken },
     });
-    console.log("got in handle token refresh 4");
+    // console.log("got in handle token refresh 4");
     res
       .cookie("accessToken", newAccessToken, {
         httpOnly: true,

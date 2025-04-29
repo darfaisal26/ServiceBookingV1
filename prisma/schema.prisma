@@ -6,8 +6,8 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma"
   output   = "../node_modules/.prisma/client"
+  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -36,11 +36,12 @@ model User {
 
   role   Role         @relation(fields: [roleId], references: [id])
   gender GenderMaster @relation(fields: [genderId], references: [id])
-  // ClientProfile              ClientProfile[]
-  // DriverProfile              DriverProfile[]
+  ClientProfile             ClientProfile[]   
+  WorkerProfile              WorkerProfile[]
+  DriverProfile              DriverProfile[]
+  SystemAdminProfile       SystemAdminProfile[]
   // UserAddress                UserAddress[]
   // UserNotificationPreference UserNotificationPreference[]
-  // WorkerProfile              WorkerProfile[]
 }
 
 model Role {
@@ -57,10 +58,10 @@ model GenderMaster {
   users User[]
 }
 
-// enum PaymentStatusEnum {
-//   Active
-//   Inactive
-// }
+enum PaymentStatusEnum {
+  Active
+  Inactive
+}
 
 // model Booking {
 //   id             Int           @id @default(autoincrement())
@@ -86,18 +87,50 @@ model GenderMaster {
 //   ClientReview ClientReview[]
 // }
 
-// model ClientProfile {
-//   id         Int      @id @default(autoincrement())
-//   user_id    Int
-//   created_at DateTime @default(now())
-//   updated_at DateTime @default(now()) @updatedAt
-//   is_active  Boolean  @default(true)
+model ClientProfile {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  is_active  Boolean  @default(true)
 
-//   user         User           @relation(fields: [user_id], references: [id])
-//   Booking      Booking[]
-//   ClientReview ClientReview[]
-// }
+  user         User           @relation(fields: [user_id], references: [id])
+  // Booking      Booking[]
+  // ClientReview ClientReview[]
+}
+model DriverProfile {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  is_active  Boolean  @default(true)
 
+  user    User      @relation(fields: [user_id], references: [id])
+  // Booking Booking[]
+}
+model SystemAdminProfile {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  is_active  Boolean  @default(true)
+
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model WorkerProfile {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  is_active  Boolean  @default(true)
+  experience Int?
+
+  user           User             @relation(fields: [user_id], references: [id])
+  // workerServices WorkerServices[]
+  // workerSkills   WorkerSkills[]
+  // Booking        Booking[]
+}
 // model ClientReview {
 //   id         Int     @id @default(autoincrement())
 //   ReviewText String?
@@ -109,16 +142,6 @@ model GenderMaster {
 //   booking Booking       @relation(fields: [booking_id], references: [id])
 // }
 
-// model DriverProfile {
-//   id         Int      @id @default(autoincrement())
-//   user_id    Int
-//   created_at DateTime @default(now())
-//   updated_at DateTime @default(now()) @updatedAt
-//   is_active  Boolean  @default(true)
-
-//   user    User      @relation(fields: [user_id], references: [id])
-//   Booking Booking[]
-// }
 
 // model NotificationMaster {
 //   id                Int      @id @default(autoincrement())
@@ -161,32 +184,26 @@ model GenderMaster {
 //   payments Payment[]
 // }
 
-// model ServiceMaster {
-//   id           Int      @id @default(autoincrement())
-//   service_name String
-//   created_at   DateTime @default(now())
-//   is_active    Boolean  @default(true)
+model ServiceMaster {
+  id           Int      @id @default(autoincrement())
+  service_name String
+  created_at   DateTime @default(now())
+  is_active    Boolean  @default(true)
 
-//   workerServices WorkerServices[]
-//   Booking        Booking[]
-// }
+  // workerServices WorkerServices[]
+  // Booking        Booking[]
+}
 
-// model SkillMaster {
-//   id         Int      @id @default(autoincrement())
-//   skill_name String
-//   created_at DateTime @default(now())
-//   is_active  Boolean  @default(true)
+model SkillMaster {
+  id         Int      @id @default(autoincrement())
+  skill_name String
+  created_at DateTime @default(now())
+  is_active  Boolean  @default(true)
 
-//   workerSkills WorkerSkills[]
-// }
+  // workerSkills WorkerSkills[]
+}
 
-// model SystemAdminProfile {
-//   id         Int      @id @default(autoincrement())
-//   user_id    Int
-//   created_at DateTime @default(now())
-//   updated_at DateTime @default(now()) @updatedAt
-//   is_active  Boolean  @default(true)
-// }
+
 
 // model UserAddress {
 //   id      Int    @id @default(autoincrement())
@@ -211,19 +228,7 @@ model GenderMaster {
 //   user         User               @relation(fields: [user_id], references: [id])
 // }
 
-// model WorkerProfile {
-//   id         Int      @id @default(autoincrement())
-//   user_id    Int
-//   created_at DateTime @default(now())
-//   updated_at DateTime @default(now()) @updatedAt
-//   is_active  Boolean  @default(true)
-//   experience Int?
 
-//   user           User             @relation(fields: [user_id], references: [id])
-//   workerServices WorkerServices[]
-//   workerSkills   WorkerSkills[]
-//   Booking        Booking[]
-// }
 
 // model WorkerServices {
 //   worker_id  Int

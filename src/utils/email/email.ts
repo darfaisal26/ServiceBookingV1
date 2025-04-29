@@ -16,9 +16,13 @@ export const sendPasswordResetEmail = async (
 ) => {
   try {
     const templatePath = path.join(__dirname, "templates/password-reset.hbs");
+    // console.log(templatePath, "templatePath");
     const source = fs.readFileSync(templatePath, "utf-8").toString();
+    // console.log("abc start", source, " end sourcessss");
     const template = handlebars.compile(source);
+    console.log(template, "template");
     const html = template({ resetUrl });
+    // console.log(html, "html");
 
     const mailOptions = {
       from: config.smtp.from,
@@ -26,7 +30,7 @@ export const sendPasswordResetEmail = async (
       subject: "Password Reset Request",
       html,
     };
-    console.log(mailOptions, transporter, "mailOptions");
+    // console.log(mailOptions, transporter, "mailOptions");
 
     await transporter.sendMail(mailOptions);
     logger.info(`Password reset email sent to ${email}`);

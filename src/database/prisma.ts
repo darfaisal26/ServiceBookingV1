@@ -7,6 +7,7 @@ const prisma = new PrismaClient({
       : ["warn", "error"],
   errorFormat: "pretty",
 });
+// console.log("📦", prisma);
 
 export const connectDB = async () => {
   try {

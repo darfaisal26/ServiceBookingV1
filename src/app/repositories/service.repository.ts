@@ -2,9 +2,7 @@ import prisma from "../../database/prisma";
 
 
 export const getAllServices = async () => {
-  return prisma.serviceMaster.findMany({
-    where: { is_active: true },
-  });
+  return prisma.serviceMaster.findMany();
 };
 
 export const getServiceById = async (id: number) => {
@@ -19,7 +17,11 @@ export const createService = async (service_name: string) => {
   });
 };
 
-export const updateService = async (id: number, service_name: string, is_active?: boolean) => {
+export const updateService = async (
+  id: number,
+  service_name: string,
+  is_active?: boolean
+) => {
   return prisma.serviceMaster.update({
     where: { id },
     data: {
@@ -35,3 +37,9 @@ export const deleteService = async (id: number) => {
   });
 };
 
+export const toggleServiceStatus = async (id: number, is_active: boolean) => {
+  return prisma.serviceMaster.update({
+    where: { id },
+    data: { is_active },
+  });
+};
